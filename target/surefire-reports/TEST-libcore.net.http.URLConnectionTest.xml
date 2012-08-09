@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="4.816" errors="14" skipped="0" tests="99" name="libcore.net.http.URLConnectionTest">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/jdk1.6.0_31/jre/lib/amd64"/>
+    <property name="java.vm.version" value="20.6-b01"/>
+    <property name="java.vm.vendor" value="Sun Microsystems Inc."/>
+    <property name="java.vendor.url" value="http://java.sun.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/usr/local/google/client/okhttp/okhttp"/>
+    <property name="java.runtime.version" value="1.6.0_31-b04"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/jdk1.6.0_31/jre/lib/endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="os.name" value="Linux"/>
+    <property name="classworlds.conf" value="/usr/share/maven2/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/lib/jvm/jdk1.6.0_31/jre/lib/amd64/server:/usr/lib/jvm/jdk1.6.0_31/jre/lib/amd64:/usr/lib/jvm/jdk1.6.0_31/jre/../lib/amd64:/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="50.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="2.6.38.8-gg868"/>
+    <property name="user.home" value="/home/narayan"/>
+    <property name="user.timezone" value="Europe/London"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="1.6"/>
+    <property name="user.name" value="narayan"/>
+    <property name="java.class.path" value="/usr/share/maven2/boot/classworlds.jar"/>
+    <property name="java.vm.specification.version" value="1.0"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/usr/lib/jvm/jdk1.6.0_31/jre"/>
+    <property name="sun.java.command" value="org.codehaus.classworlds.Launcher &quot;-e&quot; &quot;clean&quot; &quot;verify&quot;"/>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="user.language" value="en"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.6.0_31"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/jdk1.6.0_31/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="securerandom.source" value="file:/dev/./urandom"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/jdk1.6.0_31/jre/lib/resources.jar:/usr/lib/jvm/jdk1.6.0_31/jre/lib/rt.jar:/usr/lib/jvm/jdk1.6.0_31/jre/lib/sunrsasign.jar:/usr/lib/jvm/jdk1.6.0_31/jre/lib/jsse.jar:/usr/lib/jvm/jdk1.6.0_31/jre/lib/jce.jar:/usr/lib/jvm/jdk1.6.0_31/jre/lib/charsets.jar:/usr/lib/jvm/jdk1.6.0_31/jre/lib/modules/jdk.boot.jar:/usr/lib/jvm/jdk1.6.0_31/jre/classes"/>
+    <property name="java.vendor" value="Sun Microsystems Inc."/>
+    <property name="maven.home" value="/usr/share/maven2"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase time="0.038" classname="libcore.net.http.URLConnectionTest" name="testRequestHeaders"/>
+  <testcase time="0" classname="libcore.net.http.URLConnectionTest" name="testGetRequestPropertyReturnsLastValue"/>
+  <testcase time="0.017" classname="libcore.net.http.URLConnectionTest" name="testResponseHeaders"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testGetErrorStreamOnSuccessfulRequest"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testGetErrorStreamOnUnsuccessfulRequest"/>
+  <testcase time="0" classname="libcore.net.http.URLConnectionTest" name="test_2939"/>
+  <testcase time="0.011" classname="libcore.net.http.URLConnectionTest" name="test_10100"/>
+  <testcase time="0.074" classname="libcore.net.http.URLConnectionTest" name="testConnectionsArePooled"/>
+  <testcase time="0.081" classname="libcore.net.http.URLConnectionTest" name="testChunkedConnectionsArePooled"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testServerClosesSocket"/>
+  <testcase time="0.007" classname="libcore.net.http.URLConnectionTest" name="testServerShutdownInput"/>
+  <testcase time="0.101" classname="libcore.net.http.URLConnectionTest" name="test_chunkedUpload_byteByByte"/>
+  <testcase time="0.01" classname="libcore.net.http.URLConnectionTest" name="test_chunkedUpload_smallBuffers"/>
+  <testcase time="0.013" classname="libcore.net.http.URLConnectionTest" name="test_chunkedUpload_largeBuffers"/>
+  <testcase time="0.006" classname="libcore.net.http.URLConnectionTest" name="test_fixedLengthUpload_smallBuffers"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="test_fixedLengthUpload_largeBuffers"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testGetResponseCodeNoResponseBody"/>
+  <testcase time="0.691" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttps">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttps(URLConnectionTest.java:420)
+</error>
+    <system-err>Aug 9, 2012 11:48:39 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: GET / HTTP/1.1 and responded: HTTP/1.1 200 OK
+Aug 9, 2012 11:48:39 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+</system-err>
+  </testcase>
+  <testcase time="0.075" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpsReusingConnections">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpsReusingConnections(URLConnectionTest.java:438)
+</error>
+    <system-err>Aug 9, 2012 11:48:39 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+</system-err>
+  </testcase>
+  <testcase time="0.08" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpsReusingConnectionsDifferentFactories">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpsReusingConnectionsDifferentFactories(URLConnectionTest.java:460)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+</system-err>
+  </testcase>
+  <testcase time="0.119" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpsWithSSLFallback"/>
+  <testcase time="0.004" classname="libcore.net.http.URLConnectionTest" name="testConnectViaProxyUsingProxyArg"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testConnectViaProxyUsingProxySystemProperty"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testConnectViaProxyUsingHttpProxySystemProperty"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testContentDisagreesWithContentLengthHeader"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testContentDisagreesWithChunkedHeader"/>
+  <testcase time="0.081" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpProxyToHttpsUsingProxyArgWithNoProxy">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaDirectProxyToHttps(URLConnectionTest.java:581)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttpsUsingProxyArgWithNoProxy(URLConnectionTest.java:563)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: GET / HTTP/1.1 and responded: HTTP/1.1 200 OK
+Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+</system-err>
+  </testcase>
+  <testcase time="0.079" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpProxyToHttpsUsingHttpProxySystemProperty">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaDirectProxyToHttps(URLConnectionTest.java:581)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttpsUsingHttpProxySystemProperty(URLConnectionTest.java:568)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+</system-err>
+  </testcase>
+  <testcase time="0.08" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpProxyToHttpsUsingProxyArg">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttps(URLConnectionTest.java:622)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttpsUsingProxyArg(URLConnectionTest.java:588)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: CONNECT android.com:443 HTTP/1.1 and responded: HTTP/1.1 200 OK
+</system-err>
+  </testcase>
+  <testcase time="0.09" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpProxyToHttpsUsingProxySystemProperty">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttps(URLConnectionTest.java:622)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttpsUsingProxySystemProperty(URLConnectionTest.java:596)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: CONNECT android.com:443 HTTP/1.1 and responded: HTTP/1.1 200 OK
+</system-err>
+  </testcase>
+  <testcase time="0.08" classname="libcore.net.http.URLConnectionTest" name="testConnectViaHttpProxyToHttpsUsingHttpsProxySystemProperty">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttps(URLConnectionTest.java:622)
+	at libcore.net.http.URLConnectionTest.testConnectViaHttpProxyToHttpsUsingHttpsProxySystemProperty(URLConnectionTest.java:600)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: CONNECT android.com:443 HTTP/1.1 and responded: HTTP/1.1 200 OK
+</system-err>
+  </testcase>
+  <testcase time="0.08" classname="libcore.net.http.URLConnectionTest" name="testProxyConnectIncludesProxyHeadersOnly">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testProxyConnectIncludesProxyHeadersOnly(URLConnectionTest.java:657)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: CONNECT android.com:443 HTTP/1.1 and responded: HTTP/1.1 200 OK
+</system-err>
+  </testcase>
+  <testcase time="0.14" classname="libcore.net.http.URLConnectionTest" name="testProxyAuthenticateOnConnect">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:165)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1943)
+	at libcore.net.http.URLConnectionTest.assertContent(URLConnectionTest.java:1949)
+	at libcore.net.http.URLConnectionTest.testProxyAuthenticateOnConnect(URLConnectionTest.java:688)
+</error>
+    <system-err>Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: CONNECT android.com:443 HTTP/1.1 and responded: HTTP/1.1 407 OK
+Aug 9, 2012 11:48:40 AM com.google.mockwebserver.MockWebServer$2 processOneRequest
+INFO: Received request: CONNECT android.com:443 HTTP/1.1 and responded: HTTP/1.1 200 OK
+</system-err>
+  </testcase>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testDisconnectedConnection"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testDisconnectBeforeConnect"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testDefaultRequestProperty"/>
+  <testcase time="0.035" classname="libcore.net.http.URLConnectionTest" name="testMarkAndResetWithContentLengthHeader"/>
+  <testcase time="0.04" classname="libcore.net.http.URLConnectionTest" name="testMarkAndResetWithChunkedEncoding"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testMarkAndResetWithNoLengthHeaders"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testNonHexChunkSize"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testMissingChunkBody"/>
+  <testcase time="0.01" classname="libcore.net.http.URLConnectionTest" name="testGzipEncodingEnabledByDefault"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testClientConfiguredGzipContentEncoding"/>
+  <testcase time="0.041" classname="libcore.net.http.URLConnectionTest" name="testGzipAndConnectionReuseWithFixedLength"/>
+  <testcase time="0.039" classname="libcore.net.http.URLConnectionTest" name="testGzipAndConnectionReuseWithChunkedEncoding"/>
+  <testcase time="0.01" classname="libcore.net.http.URLConnectionTest" name="testClientConfiguredCustomContentEncoding"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testSetChunkedStreamingMode"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testAuthenticateWithFixedLengthStreaming"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testAuthenticateWithChunkedStreaming"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testSetValidRequestMethod"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testSetInvalidRequestMethodLowercase"/>
+  <testcase time="0" classname="libcore.net.http.URLConnectionTest" name="testSetInvalidRequestMethodConnect"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testCannotSetNegativeFixedLengthStreamingMode"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testCanSetNegativeChunkedStreamingMode"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testCannotSetFixedLengthStreamingModeAfterConnect"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testCannotSetChunkedStreamingModeAfterConnect"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testCannotSetFixedLengthStreamingModeAfterChunkedStreamingMode"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testCannotSetChunkedStreamingModeAfterFixedLengthStreamingMode"/>
+  <testcase time="0.087" classname="libcore.net.http.URLConnectionTest" name="testSecureFixedLengthStreaming">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpURLConnectionImpl.getOutputStream(HttpURLConnectionImpl.java:193)
+	at libcore.net.http.HttpsURLConnectionImpl.getOutputStream(HttpsURLConnectionImpl.java:281)
+	at libcore.net.http.URLConnectionTest.testSecureStreamingPost(URLConnectionTest.java:1109)
+	at libcore.net.http.URLConnectionTest.testSecureFixedLengthStreaming(URLConnectionTest.java:1083)
+</error>
+  </testcase>
+  <testcase time="0.08" classname="libcore.net.http.URLConnectionTest" name="testSecureChunkedStreaming">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:85)
+	at libcore.net.http.HttpURLConnectionImpl.getOutputStream(HttpURLConnectionImpl.java:193)
+	at libcore.net.http.HttpsURLConnectionImpl.getOutputStream(HttpsURLConnectionImpl.java:281)
+	at libcore.net.http.URLConnectionTest.testSecureStreamingPost(URLConnectionTest.java:1109)
+	at libcore.net.http.URLConnectionTest.testSecureChunkedStreaming(URLConnectionTest.java:1087)
+</error>
+    <system-err>Aug 9, 2012 11:48:41 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+</system-err>
+  </testcase>
+  <testcase time="0.119" classname="libcore.net.http.URLConnectionTest" name="testAuthenticateWithPost"/>
+  <testcase time="0.12" classname="libcore.net.http.URLConnectionTest" name="testAuthenticateWithGet"/>
+  <testcase time="0.04" classname="libcore.net.http.URLConnectionTest" name="testRedirectedWithChunkedEncoding"/>
+  <testcase time="0.043" classname="libcore.net.http.URLConnectionTest" name="testRedirectedWithContentLengthHeader"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testRedirectedWithNoLengthHeaders"/>
+  <testcase time="0.087" classname="libcore.net.http.URLConnectionTest" name="testRedirectedOnHttps">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.getResponse(HttpURLConnectionImpl.java:278)
+	at libcore.net.http.HttpURLConnectionImpl.getInputStream(HttpURLConnectionImpl.java:173)
+	at libcore.net.http.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:271)
+	at libcore.net.http.URLConnectionTest.testRedirectedOnHttps(URLConnectionTest.java:1238)
+</error>
+  </testcase>
+  <testcase time="0.077" classname="libcore.net.http.URLConnectionTest" name="testNotRedirectedFromHttpsToHttp">
+    <error message="No callback received. Is NPN configured properly?" type="java.lang.IllegalStateException">java.lang.IllegalStateException: No callback received. Is NPN configured properly?
+	at libcore.util.Libcore.getNpnSelectedProtocol(Libcore.java:101)
+	at libcore.net.http.HttpConnection.setupSecureSocket(HttpConnection.java:223)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.makeSslConnection(HttpsURLConnectionImpl.java:471)
+	at libcore.net.http.HttpsURLConnectionImpl$HttpsEngine.connect(HttpsURLConnectionImpl.java:431)
+	at libcore.net.http.HttpEngine.sendSocketRequest(HttpEngine.java:254)
+	at libcore.net.http.HttpEngine.sendRequest(HttpEngine.java:204)
+	at libcore.net.http.HttpURLConnectionImpl.getResponse(HttpURLConnectionImpl.java:278)
+	at libcore.net.http.HttpURLConnectionImpl.getInputStream(HttpURLConnectionImpl.java:173)
+	at libcore.net.http.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:271)
+	at libcore.net.http.URLConnectionTest.testNotRedirectedFromHttpsToHttp(URLConnectionTest.java:1259)
+</error>
+    <system-err>Aug 9, 2012 11:48:41 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+Aug 9, 2012 11:48:41 AM com.google.mockwebserver.MockWebServer$2 processConnection
+WARNING: MockWebServer connection didn&apos;t make a request
+</system-err>
+  </testcase>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testNotRedirectedFromHttpToHttps"/>
+  <testcase time="0.037" classname="libcore.net.http.URLConnectionTest" name="testResponse300MultipleChoiceWithPost"/>
+  <testcase time="0.04" classname="libcore.net.http.URLConnectionTest" name="testResponse301MovedPermanentlyWithPost"/>
+  <testcase time="0.039" classname="libcore.net.http.URLConnectionTest" name="testResponse302MovedTemporarilyWithPost"/>
+  <testcase time="0.04" classname="libcore.net.http.URLConnectionTest" name="testResponse303SeeOtherWithPost"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testResponse305UseProxy"/>
+  <testcase time="1.003" classname="libcore.net.http.URLConnectionTest" name="testReadTimeouts"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testSetChunkedEncodingAsRequestProperty"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testConnectionCloseInRequest"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testConnectionCloseInResponse"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testConnectionCloseWithRedirect"/>
+  <testcase time="0.004" classname="libcore.net.http.URLConnectionTest" name="testResponseCodeDisagreesWithHeaders"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testSingleByteReadIsSigned"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testFlushAfterStreamTransmittedWithChunkedEncoding"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testFlushAfterStreamTransmittedWithFixedLength"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testFlushAfterStreamTransmittedWithNoLengthHeaders"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testGetHeadersThrows"/>
+  <testcase time="0.011" classname="libcore.net.http.URLConnectionTest" name="testResponseCacheReturnsNullOutputStream"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testReadAfterLastByte"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testGetContent"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testGetContentOfType"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testGetOutputStreamOnGetFails"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testGetOutputAfterGetInputStreamFails"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testSetDoOutputOrDoInputAfterConnectFails"/>
+  <testcase time="0.003" classname="libcore.net.http.URLConnectionTest" name="testClientSendsContentLength"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testGetContentLengthConnects"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testGetContentTypeConnects"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testGetContentEncodingConnects"/>
+  <testcase time="0.001" classname="libcore.net.http.URLConnectionTest" name="testUrlContainsQueryButNoPath"/>
+  <testcase time="0.007" classname="libcore.net.http.URLConnectionTest" name="testInputStreamAvailableWithChunkedEncoding"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testInputStreamAvailableWithContentLengthHeader"/>
+  <testcase time="0.002" classname="libcore.net.http.URLConnectionTest" name="testInputStreamAvailableWithNoLengthHeaders"/>
+</testsuite>
