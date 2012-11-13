@@ -1,0 +1,7 @@
+Code-Review+2: Brian Carlstrom <bdc@google.com>
+Verified+1: Narayan Kamath <narayan@google.com>
+Submitted-by: Narayan Kamath <narayan@google.com>
+Submitted-at: Tue, 13 Nov 2012 10:04:14 -0800
+Reviewed-on: https://android-review.googlesource.com/46180
+Project: platform/external/okhttp
+Branch: refs/heads/master
