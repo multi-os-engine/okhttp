@@ -79,24 +79,33 @@ public final class ConnectionPool {
         synchronized (connectionPool) {
             List<Connection> connections = connectionPool.get(address);
             while (connections != null) {
-                Connection connection = connections.get(connections.size() - 1);
-                if (!connection.isSpdy()) {
-                    connections.remove(connections.size() - 1);
-                }
                 if (connections.isEmpty()) {
                     connectionPool.remove(address);
                     connections = null;
                 }
+
+                Connection connection = connections.get(connections.size() - 1);
+                if (!connection.isSpdy()) {
+                    connections.remove(connections.size() - 1);
+                    if (connections.isEmpty()) {
+                        connectionPool.remove(address);
+                        connections = null;
+                    }
+                }
+
                 if (!connection.isEligibleForRecycling()) {
                     Util.closeQuietly(connection);
+                    connections.remove(connections.size() - 1);
                     continue;
                 }
+
                 try {
                     Platform.get().tagSocket(connection.getSocket());
                 } catch (SocketException e) {
                     // When unable to tag, skip recycling and close
                     Platform.get().logW("Unable to tagSocket(): " + e);
                     Util.closeQuietly(connection);
+                    connections.remove(connections.size() - 1);
                     continue;
                 }
                 return connection;
