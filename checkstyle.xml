@@ -27,7 +27,7 @@
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
-        <module name="ConstantName"/>
+        <!--<module name="ConstantName"/>-->
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
         <module name="MemberName"/>
@@ -104,7 +104,7 @@
         <!-- Checks for class design                         -->
         <!-- See http://checkstyle.sf.net/config_design.html -->
         <!--module name="DesignForExtension"/-->
-        <module name="FinalClass"/>
+        <!--<module name="FinalClass"/>-->
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
         <!--s/module name="VisibilityModifier"/-->

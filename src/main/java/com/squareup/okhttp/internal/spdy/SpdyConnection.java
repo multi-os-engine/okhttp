@@ -70,7 +70,13 @@ public final class SpdyConnection implements Closeable {
     static final int TYPE_PING = 0x6;
     static final int TYPE_GOAWAY = 0x7;
     static final int TYPE_HEADERS = 0x8;
-    static final int VERSION = 2;
+    static final int TYPE_WINDOW_UPDATE = 0x9;
+    static final int TYPE_CREDENTIAL = 0x10;
+    static final int VERSION = 3;
+
+    static final int GOAWAY_OK = 0;
+    static final int GOAWAY_PROTOCOL_ERROR = 1;
+    static final int GOAWAY_INTERNAL_ERROR = 2;
 
     /**
      * True if this peer initiated the connection.
@@ -147,8 +153,9 @@ public final class SpdyConnection implements Closeable {
     public SpdyStream newStream(List<String> requestHeaders, boolean out, boolean in)
             throws IOException {
         int flags = (out ? 0 : FLAG_FIN) | (in ? 0 : FLAG_UNIDIRECTIONAL);
-        int associatedStreamId = 0;  // TODO: permit the caller to specify an associated stream.
-        int priority = 0; // TODO: permit the caller to specify a priority.
+        int associatedStreamId = 0;  // TODO: permit the caller to specify an associated stream?
+        int priority = 0; // TODO: permit the caller to specify a priority?
+        int slot = 0; // TODO: permit the caller to specify a slot?
         SpdyStream stream;
         int streamId;
 
@@ -159,13 +166,15 @@ public final class SpdyConnection implements Closeable {
                 }
                 streamId = nextStreamId;
                 nextStreamId += 2;
-                stream = new SpdyStream(streamId, this, requestHeaders, flags);
+                stream = new SpdyStream(streamId, this, flags, priority, slot, requestHeaders,
+                        settings);
                 if (stream.isOpen()) {
                     streams.put(streamId, stream);
                 }
             }
 
-            spdyWriter.synStream(flags, streamId, associatedStreamId, priority, requestHeaders);
+            spdyWriter.synStream(flags, streamId, associatedStreamId, priority, slot,
+                    requestHeaders);
         }
 
         return stream;
@@ -194,7 +203,22 @@ public final class SpdyConnection implements Closeable {
     }
 
     void writeSynReset(int streamId, int statusCode) throws IOException {
-        spdyWriter.synReset(streamId, statusCode);
+        spdyWriter.rstStream(streamId, statusCode);
+    }
+
+    void writeWindowUpdateLater(final int streamId, final int deltaWindowSize) {
+        writeExecutor.execute(new Runnable() {
+            @Override public void run() {
+                try {
+                    writeWindowUpdate(streamId, deltaWindowSize);
+                } catch (IOException ignored) {
+                }
+            }
+        });
+    }
+
+    void writeWindowUpdate(int streamId, int deltaWindowSize) throws IOException {
+        spdyWriter.windowUpdate(streamId, deltaWindowSize);
     }
 
     /**
@@ -253,13 +277,27 @@ public final class SpdyConnection implements Closeable {
         }
     }
 
+    private void shutdownLater(final int statusCode) {
+        writeExecutor.execute(new Runnable() {
+            @Override public void run() {
+                try {
+                    shutdown(statusCode);
+                } catch (IOException ignored) {
+                }
+            }
+        });
+    }
+
     /**
      * Degrades this connection such that new streams can neither be created
      * locally, nor accepted from the remote peer. Existing streams are not
      * impacted. This is intended to permit an endpoint to gracefully stop
      * accepting new requests without harming previously established streams.
+     *
+     * @param statusCode one of {@link #GOAWAY_OK}, {@link
+     *     #GOAWAY_INTERNAL_ERROR} or {@link #GOAWAY_PROTOCOL_ERROR}.
      */
-    public void shutdown() throws IOException {
+    public void shutdown(int statusCode) throws IOException {
         synchronized (spdyWriter) {
             int lastGoodStreamId;
             synchronized (this) {
@@ -269,7 +307,7 @@ public final class SpdyConnection implements Closeable {
                 shutdown = true;
                 lastGoodStreamId = this.lastGoodStreamId;
             }
-            spdyWriter.goAway(0, lastGoodStreamId);
+            spdyWriter.goAway(0, lastGoodStreamId, statusCode);
         }
     }
 
@@ -279,7 +317,7 @@ public final class SpdyConnection implements Closeable {
      * internal executor services.
      */
     @Override public void close() throws IOException {
-        shutdown();
+        shutdown(GOAWAY_OK);
 
         SpdyStream[] streamsToClose = null;
         Ping[] pingsToCancel = null;
@@ -354,6 +392,8 @@ public final class SpdyConnection implements Closeable {
             try {
                 while (spdyReader.nextFrame(this)) {
                 }
+            } catch (ProtocolException e) {
+                shutdownLater(GOAWAY_PROTOCOL_ERROR);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } finally {
@@ -381,11 +421,12 @@ public final class SpdyConnection implements Closeable {
         }
 
         @Override public void synStream(int flags, int streamId, int associatedStreamId,
-                int priority, List<String> nameValueBlock) {
-            final SpdyStream synStream = new SpdyStream(streamId, SpdyConnection.this,
-                    nameValueBlock, flags);
+                int priority, int slot, List<String> nameValueBlock) {
+            final SpdyStream synStream;
             final SpdyStream previous;
             synchronized (SpdyConnection.this) {
+                synStream = new SpdyStream(streamId, SpdyConnection.this, flags, priority, slot,
+                        nameValueBlock, settings);
                 if (shutdown) {
                     return;
                 }
@@ -421,7 +462,7 @@ public final class SpdyConnection implements Closeable {
                     replyStream.receiveFin();
                 }
             } catch (ProtocolException e) {
-                replyStream.closeLater(SpdyStream.RST_PROTOCOL_ERROR);
+                replyStream.closeLater(SpdyStream.RST_STREAM_IN_USE);
             }
         }
 
@@ -445,12 +486,28 @@ public final class SpdyConnection implements Closeable {
         }
 
         @Override public void settings(int flags, Settings newSettings) {
+            SpdyStream[] streamsToNotify = null;
             synchronized (SpdyConnection.this) {
                 if (settings == null
                         || (flags & Settings.FLAG_CLEAR_PREVIOUSLY_PERSISTED_SETTINGS) != 0) {
                     settings = newSettings;
                 } else {
                     settings.merge(newSettings);
+                }
+                if (!streams.isEmpty()) {
+                    streamsToNotify = streams.values().toArray(new SpdyStream[streams.size()]);
+                }
+            }
+            if (streamsToNotify != null) {
+                for (SpdyStream stream : streamsToNotify) {
+                    // The synchronization here is ugly. We need to synchronize on 'this' to guard
+                    // reads to 'settings'. We synchronize on 'stream' to guard the state change.
+                    // And we need to acquire the 'stream' lock first, since that may block.
+                    synchronized (stream) {
+                        synchronized (this) {
+                            stream.receiveSettings(settings);
+                        }
+                    }
                 }
             }
         }
@@ -470,7 +527,7 @@ public final class SpdyConnection implements Closeable {
             }
         }
 
-        @Override public void goAway(int flags, int lastGoodStreamId) {
+        @Override public void goAway(int flags, int lastGoodStreamId, int statusCode) {
             synchronized (SpdyConnection.this) {
                 shutdown = true;
 
@@ -484,6 +541,13 @@ public final class SpdyConnection implements Closeable {
                         i.remove();
                     }
                 }
+            }
+        }
+
+        @Override public void windowUpdate(int flags, int streamId, int deltaWindowSize) {
+            SpdyStream stream = getStream(streamId);
+            if (stream != null) {
+                stream.receiveWindowUpdate(deltaWindowSize);
             }
         }
     }
