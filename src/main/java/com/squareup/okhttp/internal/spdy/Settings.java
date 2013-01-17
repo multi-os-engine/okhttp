@@ -16,6 +16,12 @@
 package com.squareup.okhttp.internal.spdy;
 
 final class Settings {
+    /**
+     * From the spdy/3 spec, the default initial window size for all streams is
+     * 64 KiB. (Chrome 25 uses 10 MiB).
+     */
+    static final int DEFAULT_INITIAL_WINDOW_SIZE = 64 * 1024;
+
     /** Peer request to clear durable settings. */
     static final int FLAG_CLEAR_PREVIOUSLY_PERSISTED_SETTINGS = 0x1;
 
@@ -38,8 +44,10 @@ final class Settings {
     static final int DOWNLOAD_RETRANS_RATE = 0x6;
     /** Window size in bytes. */
     static final int INITIAL_WINDOW_SIZE = 0x7;
+    /** Window size in bytes. */
+    static final int CLIENT_CERTIFICATE_VECTOR_SIZE = 0x8;
     /** Total number of settings. */
-    static final int COUNT = 0x8;
+    static final int COUNT = 0x9;
 
     /** Bitfield of which flags that values. */
     private int set;
@@ -139,6 +147,11 @@ final class Settings {
     int getInitialWindowSize(int defaultValue) {
         int bit = 1 << INITIAL_WINDOW_SIZE;
         return (bit & set) != 0 ? values[INITIAL_WINDOW_SIZE] : defaultValue;
+    }
+
+    int getClientCertificateVectorSize(int defaultValue) {
+        int bit = 1 << CLIENT_CERTIFICATE_VECTOR_SIZE;
+        return (bit & set) != 0 ? values[CLIENT_CERTIFICATE_VECTOR_SIZE] : defaultValue;
     }
 
     /**
