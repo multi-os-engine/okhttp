@@ -1,0 +1,7 @@
+Code-Review+2: Brian Carlstrom <bdc@google.com>
+Verified+1: Brian Carlstrom <bdc@google.com>
+Submitted-by: Brian Carlstrom <bdc@google.com>
+Submitted-at: Fri, 01 Feb 2013 22:09:01 +0000
+Reviewed-on: https://android-review.googlesource.com/50034
+Project: platform/external/okhttp
+Branch: refs/heads/master
