@@ -1,0 +1,7 @@
+Code-Review+2: Elliott Hughes <enh@google.com>
+Verified+1: Brian Carlstrom <bdc@google.com>
+Submitted-by: Brian Carlstrom <bdc@google.com>
+Submitted-at: Tue, 02 Apr 2013 20:58:50 +0000
+Reviewed-on: https://android-review.googlesource.com/55151
+Project: platform/external/okhttp
+Branch: refs/heads/master
