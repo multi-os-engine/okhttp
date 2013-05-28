@@ -145,7 +145,7 @@ public final class Connection implements Closeable {
       platform.supportTlsIntolerantServer(sslSocket);
     }
 
-    final boolean spdyEnabled = false;
+    final boolean spdyEnabled = platform.isSpdyEnabled();
     if (modernTls && spdyEnabled) {
       platform.setNpnProtocols(sslSocket, NPN_PROTOCOLS);
     }

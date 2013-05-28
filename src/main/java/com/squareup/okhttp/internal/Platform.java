@@ -123,6 +123,10 @@ public class Platform {
     }
   }
 
+  public boolean isSpdyEnabled() {
+      return true;
+  }
+
   /** Attempt to match the host runtime to a capable Platform implementation. */
   private static Platform findPlatform() {
     // Attempt to find Android 2.3+ APIs.

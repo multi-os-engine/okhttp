@@ -94,4 +94,8 @@ public final class Platform {
             OutputStream out, Deflater deflater, boolean syncFlush) {
         return new DeflaterOutputStream(out, deflater, syncFlush);
     }
+
+    public boolean isSpdyEnabled() {
+        return false;
+    }
 }
