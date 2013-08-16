@@ -307,6 +307,7 @@ public class HttpEngine {
    * pool. Subclasses use this hook to get a reference to the TLS data.
    */
   protected void connected(Connection connection) {
+    policy.setSelectedProxy(connection.getRoute().getProxy());
     connected = true;
   }
 
