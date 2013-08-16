@@ -95,7 +95,7 @@ public class HttpEngine {
 
   private ResponseSource responseSource;
 
-  protected Connection connection;
+  /* package */ Connection connection;
   protected RouteSelector routeSelector;
   private OutputStream requestBodyOut;
 

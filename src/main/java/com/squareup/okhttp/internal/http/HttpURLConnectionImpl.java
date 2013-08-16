@@ -477,7 +477,20 @@ public class HttpURLConnectionImpl extends HttpURLConnection implements Policy {
   }
 
   @Override public final boolean usingProxy() {
-    Proxy proxy = client.getProxy();
+    if (httpEngine != null && httpEngine.connection != null) {
+      Proxy proxy = httpEngine.connection.getRoute().getProxy();
+      return isValidNonDirectProxy(proxy);
+    }
+
+    // This behaviour is a bit odd (but is probably justified by the
+    // oddness of the APIs involved). Before a connection is established,
+    // this method will return true only if this connection was explicitly
+    // opened with a Proxy. We don't attempt to query the ProxySelector
+    // at all.
+    return isValidNonDirectProxy(client.getProxy());
+  }
+
+  private static final boolean isValidNonDirectProxy(Proxy proxy) {
     return proxy != null && proxy.type() != Proxy.Type.DIRECT;
   }
 
