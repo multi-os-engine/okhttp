@@ -150,7 +150,12 @@ public final class HttpAuthenticator {
         pos = HeaderParser.skipUntil(value, pos, ",");
         pos++; // Consume ',' comma.
         pos = HeaderParser.skipWhitespace(value, pos);
-        result.add(new Challenge(scheme, realm));
+
+        // We support only the "Basic" authorization scheme, don't pretend
+        // that we support anything else.
+        if ("Basic".equalsIgnoreCase(scheme)) {
+          result.add(new Challenge(scheme, realm));
+        }
       }
     }
     return result;
