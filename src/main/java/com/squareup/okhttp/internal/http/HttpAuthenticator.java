@@ -39,7 +39,7 @@ public final class HttpAuthenticator {
     @Override public Credential authenticate(
         Proxy proxy, URL url, List<Challenge> challenges) throws IOException {
       for (Challenge challenge : challenges) {
-        if (!"Basic".equals(challenge.getScheme())) {
+        if (!"Basic".equalsIgnoreCase(challenge.getScheme())) {
           continue;
         }
 
@@ -56,7 +56,7 @@ public final class HttpAuthenticator {
     @Override public Credential authenticateProxy(
         Proxy proxy, URL url, List<Challenge> challenges) throws IOException {
       for (Challenge challenge : challenges) {
-        if (!"Basic".equals(challenge.getScheme())) {
+        if (!"Basic".equalsIgnoreCase(challenge.getScheme())) {
           continue;
         }
 
