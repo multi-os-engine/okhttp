@@ -16,6 +16,8 @@
 
 package com.squareup.okhttp.internal;
 
+import com.squareup.okhttp.internal.spdy.Header;
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
@@ -25,27 +27,28 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URL;
-import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
 /** Junk drawer of utility methods. */
 public final class Util {
   public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
   public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
-  /** A cheap and type-safe constant for the ISO-8859-1 Charset. */
-  public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
+  public static final InputStream EMPTY_INPUT_STREAM = new ByteArrayInputStream(EMPTY_BYTE_ARRAY);
 
   /** A cheap and type-safe constant for the US-ASCII Charset. */
   public static final Charset US_ASCII = Charset.forName("US-ASCII");
@@ -72,33 +75,15 @@ public final class Util {
     return specifiedPort != -1 ? specifiedPort : getDefaultPort(scheme);
   }
 
-  public static int getDefaultPort(String scheme) {
-    if ("http".equalsIgnoreCase(scheme)) {
-      return 80;
-    } else if ("https".equalsIgnoreCase(scheme)) {
-      return 443;
-    } else {
-      return -1;
-    }
+  public static int getDefaultPort(String protocol) {
+    if ("http".equals(protocol)) return 80;
+    if ("https".equals(protocol)) return 443;
+    return -1;
   }
 
-  public static void checkOffsetAndCount(int arrayLength, int offset, int count) {
+  public static void checkOffsetAndCount(long arrayLength, long offset, long count) {
     if ((offset | count) < 0 || offset > arrayLength || arrayLength - offset < count) {
       throw new ArrayIndexOutOfBoundsException();
-    }
-  }
-
-  public static void pokeInt(byte[] dst, int offset, int value, ByteOrder order) {
-    if (order == ByteOrder.BIG_ENDIAN) {
-      dst[offset++] = (byte) ((value >> 24) & 0xff);
-      dst[offset++] = (byte) ((value >> 16) & 0xff);
-      dst[offset++] = (byte) ((value >> 8) & 0xff);
-      dst[offset] = (byte) ((value >> 0) & 0xff);
-    } else {
-      dst[offset++] = (byte) ((value >> 0) & 0xff);
-      dst[offset++] = (byte) ((value >> 8) & 0xff);
-      dst[offset++] = (byte) ((value >> 16) & 0xff);
-      dst[offset] = (byte) ((value >> 24) & 0xff);
     }
   }
 
@@ -266,12 +251,6 @@ public final class Util {
     }
   }
 
-  public static void skipAll(InputStream in) throws IOException {
-    do {
-      in.skip(Long.MAX_VALUE);
-    } while (in.read() != -1);
-  }
-
   /**
    * Call {@code in.read()} repeatedly until either the stream is exhausted or
    * {@code byteCount} bytes have been read.
@@ -282,9 +261,16 @@ public final class Util {
    * other threads. A thread-local buffer is also insufficient because some
    * streams may call other streams in their skip() method, also clobbering the
    * buffer.
+   *
+   * <p>This method throws a SocketTimeoutException if {@code timeoutMillis}
+   * elapses before the bytes can be skipped.
+   *
+   * @param timeoutMillis the maximum time to wait, or 0 to wait indefinitely.
    */
-  public static long skipByReading(InputStream in, long byteCount) throws IOException {
+  public static long skipByReading(InputStream in, long byteCount, long timeoutMillis)
+      throws IOException {
     if (byteCount == 0) return 0L;
+    long startNanos = timeoutMillis != 0 ? System.nanoTime() : 0;
 
     // acquire the shared skip buffer.
     byte[] buffer = skipBuffer.getAndSet(null);
@@ -296,12 +282,11 @@ public final class Util {
     while (skipped < byteCount) {
       int toRead = (int) Math.min(byteCount - skipped, buffer.length);
       int read = in.read(buffer, 0, toRead);
-      if (read == -1) {
-        break;
-      }
+      if (read == -1) break;
       skipped += read;
-      if (read < toRead) {
-        break;
+      if (timeoutMillis != 0
+          && NANOSECONDS.toMillis(System.nanoTime() - startNanos) > timeoutMillis) {
+        throw new SocketTimeoutException("Timed out after reading " + skipped + " of " + byteCount);
       }
     }
 
@@ -309,6 +294,10 @@ public final class Util {
     skipBuffer.set(buffer);
 
     return skipped;
+  }
+
+  public static long skipByReading(InputStream in, long byteCount) throws IOException {
+    return skipByReading(in, byteCount, 0);
   }
 
   /**
@@ -382,13 +371,50 @@ public final class Util {
     return Collections.unmodifiableList(new ArrayList<T>(list));
   }
 
-  public static ThreadFactory daemonThreadFactory(final String name) {
+  /** Returns an immutable list containing {@code elements}. */
+  public static <T> List<T> immutableList(T[] elements) {
+    return Collections.unmodifiableList(Arrays.asList(elements.clone()));
+  }
+
+  public static ThreadFactory threadFactory(final String name, final boolean daemon) {
     return new ThreadFactory() {
       @Override public Thread newThread(Runnable runnable) {
         Thread result = new Thread(runnable, name);
-        result.setDaemon(true);
+        result.setDaemon(daemon);
         return result;
       }
     };
+  }
+
+  public static List<Header> headerEntries(String... elements) {
+    List<Header> result = new ArrayList<Header>(elements.length / 2);
+    for (int i = 0; i < elements.length; i += 2) {
+      result.add(new Header(elements[i], elements[i + 1]));
+    }
+    return result;
+  }
+
+  /** Mutates the byte array to ensure all characters are lowercase. */
+  public static void asciiLowerCase(byte[] bytes) {
+    for (int i = 0; i < bytes.length; i++) {
+      bytes[i] = asciiLowerCase(bytes[i]);
+    }
+  }
+
+  public static byte asciiLowerCase(byte c) {
+    return 'A' <= c && c <= 'Z' ? (byte) (c + 'a' - 'A') : c;
+  }
+
+  public static int reverseBytesShort(short s) {
+    int i = s & 0xffff;
+    return (i & 0xff00) >>> 8
+        |  (i & 0x00ff) << 8;
+  }
+
+  public static int reverseBytesInt(int i) {
+    return (i & 0xff000000) >>> 24
+        |  (i & 0x00ff0000) >>> 8
+        |  (i & 0x0000ff00) << 8
+        |  (i & 0x000000ff) << 24;
   }
 }

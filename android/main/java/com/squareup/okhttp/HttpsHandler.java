@@ -47,6 +47,10 @@ public final class HttpsHandler extends HttpHandler {
         if (!(verifier instanceof DefaultHostnameVerifier)) {
             client.setHostnameVerifier(verifier);
         }
+        // OkHttp does not automatically honor the system-wide SSLSocketFactory set with
+        // HttpsURLConnection.setDefaultSSLSocketFactory().
+        // See https://github.com/square/okhttp/issues/184 for details.
+        client.setSslSocketFactory(HttpsURLConnection.getDefaultSSLSocketFactory());
 
         return client;
     }
