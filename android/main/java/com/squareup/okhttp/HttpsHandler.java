@@ -17,6 +17,8 @@
 
 package com.squareup.okhttp;
 
+import com.squareup.okhttp.adapters.ResponseCacheAdapter;
+
 import java.net.Proxy;
 import java.net.ResponseCache;
 import java.util.Arrays;
@@ -49,10 +51,18 @@ public final class HttpsHandler extends HttpHandler {
         // See https://github.com/square/okhttp/issues/184 for details.
         client.setSslSocketFactory(HttpsURLConnection.getDefaultSSLSocketFactory());
 
-        // Explicitly set the response cache.
+        // Set the response cache as needed.
         ResponseCache responseCache = ResponseCache.getDefault();
         if (responseCache != null) {
-            client.setResponseCache(responseCache);
+            if (responseCache instanceof OkResponseCache) {
+                // If the ResponseCache already happens to implement OkResponseCache, use it as it
+                // is, which will enable OkHttp to keep the stats up to date.
+                client.setOkResponseCache((OkResponseCache) responseCache);
+            } else {
+                // OkHttp does not support java.net.ResponseCache any more. Adapt from the
+                // java.net.ResponseCache to OkResponseCache.
+                client.setOkResponseCache(new ResponseCacheAdapter(responseCache));
+            }
         }
 
         return client;

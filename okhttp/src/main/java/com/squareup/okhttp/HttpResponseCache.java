@@ -105,7 +105,7 @@ import static com.squareup.okhttp.internal.Util.UTF_8;
  *         connection.addRequestProperty("Cache-Control", "max-stale=" + maxStale);
  * }</pre>
  */
-public final class HttpResponseCache extends ResponseCache implements OkResponseCache {
+public final class HttpResponseCache implements OkResponseCache {
   // TODO: add APIs to iterate the cache?
   private static final int VERSION = 201105;
   private static final int ENTRY_METADATA = 0;
@@ -123,15 +123,6 @@ public final class HttpResponseCache extends ResponseCache implements OkResponse
 
   public HttpResponseCache(File directory, long maxSize) throws IOException {
     cache = DiskLruCache.open(directory, VERSION, ENTRY_COUNT, maxSize);
-  }
-
-  @Override public CacheResponse get(URI uri, String s, Map<String, List<String>> stringListMap)
-      throws IOException {
-    throw new UnsupportedOperationException("This is not a general purpose response cache.");
-  }
-
-  @Override public CacheRequest put(URI uri, URLConnection urlConnection) throws IOException {
-    throw new UnsupportedOperationException("This is not a general purpose response cache.");
   }
 
   private static String urlToKey(Request requst) {
