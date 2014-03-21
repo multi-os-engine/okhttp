@@ -19,9 +19,7 @@ package com.squareup.okhttp;
 import com.squareup.okhttp.internal.DiskLruCache;
 import com.squareup.okhttp.internal.Util;
 import com.squareup.okhttp.internal.http.HttpMethod;
-import com.squareup.okhttp.internal.http.HttpURLConnectionImpl;
-import com.squareup.okhttp.internal.http.HttpsURLConnectionImpl;
-import com.squareup.okhttp.internal.http.JavaApiConverter;
+
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -33,10 +31,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.CacheRequest;
-import java.net.CacheResponse;
-import java.net.ResponseCache;
-import java.net.URI;
-import java.net.URLConnection;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -44,7 +38,7 @@ import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+
 import okio.BufferedSource;
 import okio.ByteString;
 import okio.Okio;
@@ -54,18 +48,6 @@ import static com.squareup.okhttp.internal.Util.UTF_8;
 /**
  * Caches HTTP and HTTPS responses to the filesystem so they may be reused,
  * saving time and bandwidth.
- *
- * <p>This cache extends {@link ResponseCache} but is only intended for use
- * with OkHttp and is not a general-purpose implementation: The
- * {@link ResponseCache} API requires that the subclass handles cache-control
- * logic as well as storage. In OkHttp the {@link HttpResponseCache} only
- * handles cursory cache-control logic.
- *
- * <p>To maintain support for previous releases the {@link HttpResponseCache}
- * will disregard any {@link #put(java.net.URI, java.net.URLConnection)}
- * calls with a URLConnection that is not from OkHttp. It will, however,
- * return cached data for any calls to {@link #get(java.net.URI, String,
- * java.util.Map)}.
  *
  * <h3>Cache Optimization</h3>
  * To measure cache effectiveness, this class tracks three statistics:
@@ -120,7 +102,7 @@ import static com.squareup.okhttp.internal.Util.UTF_8;
  *         connection.addRequestProperty("Cache-Control", "max-stale=" + maxStale);
  * }</pre>
  */
-public final class HttpResponseCache extends ResponseCache implements OkResponseCache {
+public final class HttpResponseCache implements OkResponseCache {
   // TODO: add APIs to iterate the cache?
   private static final int VERSION = 201105;
   private static final int ENTRY_METADATA = 0;
@@ -138,18 +120,6 @@ public final class HttpResponseCache extends ResponseCache implements OkResponse
 
   public HttpResponseCache(File directory, long maxSize) throws IOException {
     cache = DiskLruCache.open(directory, VERSION, ENTRY_COUNT, maxSize);
-  }
-
-  @Override public CacheResponse get(
-      URI uri, String requestMethod, Map<String, List<String>> requestHeaders)
-      throws IOException {
-
-    Request request = JavaApiConverter.createOkRequest(uri, requestMethod, requestHeaders);
-    Response response = get(request);
-    if (response == null) {
-      return null;
-    }
-    return JavaApiConverter.createJavaCacheResponse(response);
   }
 
   private static String urlToKey(Request requst) {
@@ -179,18 +149,6 @@ public final class HttpResponseCache extends ResponseCache implements OkResponse
     }
 
     return response;
-  }
-
-  @Override public CacheRequest put(URI uri, URLConnection urlConnection) throws IOException {
-    if (!isCacheableConnection(urlConnection)) {
-      return null;
-    }
-    return put(JavaApiConverter.createOkResponse(uri, urlConnection));
-  }
-
-  private static boolean isCacheableConnection(URLConnection httpConnection) {
-    return (httpConnection instanceof HttpURLConnectionImpl)
-        || (httpConnection instanceof HttpsURLConnectionImpl);
   }
 
   @Override public CacheRequest put(Response response) throws IOException {

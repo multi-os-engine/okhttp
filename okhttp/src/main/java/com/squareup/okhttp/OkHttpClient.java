@@ -19,14 +19,12 @@ import com.squareup.okhttp.internal.Util;
 import com.squareup.okhttp.internal.http.HttpAuthenticator;
 import com.squareup.okhttp.internal.http.HttpURLConnectionImpl;
 import com.squareup.okhttp.internal.http.HttpsURLConnectionImpl;
-import com.squareup.okhttp.internal.http.ResponseCacheAdapter;
 import com.squareup.okhttp.internal.tls.OkHostnameVerifier;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.ProxySelector;
-import java.net.ResponseCache;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
@@ -168,19 +166,6 @@ public final class OkHttpClient implements URLStreamHandlerFactory, Cloneable {
 
   public CookieHandler getCookieHandler() {
     return cookieHandler;
-  }
-
-  /**
-   * Sets the response cache to be used to read and write cached responses.
-   */
-  public OkHttpClient setResponseCache(ResponseCache responseCache) {
-    return setOkResponseCache(toOkResponseCache(responseCache));
-  }
-
-  public ResponseCache getResponseCache() {
-    return responseCache instanceof ResponseCacheAdapter
-        ? ((ResponseCacheAdapter) responseCache).getDelegate()
-        : null;
   }
 
   public OkHttpClient setOkResponseCache(OkResponseCache responseCache) {
@@ -453,9 +438,6 @@ public final class OkHttpClient implements URLStreamHandlerFactory, Cloneable {
     if (result.cookieHandler == null) {
       result.cookieHandler = CookieHandler.getDefault();
     }
-    if (result.responseCache == null) {
-      result.responseCache = toOkResponseCache(ResponseCache.getDefault());
-    }
     if (result.sslSocketFactory == null) {
       result.sslSocketFactory = getDefaultSSLSocketFactory();
     }
@@ -505,12 +487,6 @@ public final class OkHttpClient implements URLStreamHandlerFactory, Cloneable {
     } catch (CloneNotSupportedException e) {
       throw new AssertionError();
     }
-  }
-
-  private OkResponseCache toOkResponseCache(ResponseCache responseCache) {
-    return responseCache == null || responseCache instanceof OkResponseCache
-        ? (OkResponseCache) responseCache
-        : new ResponseCacheAdapter(responseCache);
   }
 
   /**
