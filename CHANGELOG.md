@@ -1,6 +1,32 @@
 Change Log
 ==========
 
+<<<<<<< Updated upstream
+=======
+## Version 1.5.2
+
+_2014-03-17_
+
+ * Fix bug where deleting a file that was absent from the `HttpResponseCache`
+   caused an IOException.
+ * Fix bug in HTTP/2 where our HPACK decoder wasn't emitting entries in
+   certain eviction scenarios, leading to dropped response headers.
+
+## Version 1.5.1
+
+_2014-03-11_
+
+ * Fix 1.5.0 regression where connections should not have been recycled.
+ * Fix 1.5.0 regression where transparent Gzip was broken by attempting to
+   recover from another I/O failure.
+ * Fix problems where spdy/3.1 headers may not have been compressed properly.
+ * Fix problems with spdy/3.1 and http/2 where the wrong window size was being
+   used.
+ * Fix 1.5.0 regression where conditional cache responses could corrupt the
+   connection pool.
+
+
+>>>>>>> Stashed changes
 ## Version 1.5.0
 
 _2014-03-05_
