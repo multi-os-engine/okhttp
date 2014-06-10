@@ -1,0 +1,9 @@
+Code-Review+2: Brian Carlstrom <bdc@google.com>
+Code-Review+1: Neil Fuller <nfuller@google.com>
+Code-Review+2: Narayan Kamath <narayan@google.com>
+Verified+1: Ian Rogers <irogers@google.com>
+Submitted-by: Ian Rogers <irogers@google.com>
+Submitted-at: Tue, 10 Jun 2014 03:26:41 +0000
+Reviewed-on: https://android-review.googlesource.com/97114
+Project: platform/external/okhttp
+Branch: refs/heads/master
