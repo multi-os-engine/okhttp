@@ -138,7 +138,7 @@ public final class Connection implements Closeable {
       throws IOException {
     if (connected) throw new IllegalStateException("already connected");
 
-    if (route.proxy.type() != Proxy.Type.HTTP) {
+    if (route.proxy.type() != Proxy.Type.HTTP && route.proxy.type() != Proxy.Type.DIRECT) {
       socket = new Socket(route.proxy);
     } else {
       socket = route.address.socketFactory.createSocket();
