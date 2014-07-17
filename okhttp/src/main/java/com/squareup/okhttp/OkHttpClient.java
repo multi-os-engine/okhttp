@@ -67,6 +67,7 @@ public final class OkHttpClient implements URLStreamHandlerFactory, Cloneable {
   private boolean followProtocolRedirects = true;
   private int connectTimeout;
   private int readTimeout;
+  private Dns dns;
 
   public OkHttpClient() {
     routeDatabase = new RouteDatabase();
@@ -366,6 +367,19 @@ public final class OkHttpClient implements URLStreamHandlerFactory, Cloneable {
   }
 
   /**
+   * Sets the DNS implementation that will be used by this client to resolve
+   * hostnames to IP addresses.
+   */
+  public OkHttpClient setDns(Dns dns) {
+    this.dns = dns;
+    return this;
+  }
+
+  public Dns getDns() {
+    return dns;
+  }
+
+  /**
    * Invokes {@code request} immediately, and blocks until the response can be
    * processed or is in error.
    *
@@ -470,6 +484,9 @@ public final class OkHttpClient implements URLStreamHandlerFactory, Cloneable {
     }
     if (result.protocols == null) {
       result.protocols = Protocol.HTTP2_SPDY3_AND_HTTP;
+    }
+    if (result.dns == null) {
+      result.dns = Dns.DEFAULT;
     }
     return result;
   }
