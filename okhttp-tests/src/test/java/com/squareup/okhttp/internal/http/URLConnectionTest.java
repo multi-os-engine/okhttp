@@ -663,10 +663,10 @@ public final class URLConnectionTest {
     } catch (SSLHandshakeException expected) {
     }
 
-    // The first request is registered by MockWebServer and intentionally failed. The second is
+    // The first request is registered by MockWebServer and intentionally failed. The next three are
     // failed by the socket layer.
     assertEquals(1, server.getRequestCount());
-    assertEquals(2, clientSocketFactory.getCreatedSockets().size());
+    assertEquals(4, clientSocketFactory.getCreatedSockets().size());
   }
 
   /**
