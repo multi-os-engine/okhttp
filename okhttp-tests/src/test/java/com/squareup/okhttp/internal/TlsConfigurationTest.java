@@ -51,19 +51,40 @@ public class TlsConfigurationTest {
   }
 
   @Test
-  public void useDefault() throws Exception {
-    String[] defaultProtocols = { "SSLv3", "TLSv1" };
-    SSLSocket socket = createSocketWithEnabledProtocols(defaultProtocols);
-
+  public void tlsV1AndBelow() throws Exception {
+    SSLSocket compatibleSocket = createSocketWithEnabledProtocols("SSLv3", "TLSv1", "TLSv1.1");
     try {
-      assertTrue(TlsConfiguration.USE_DEFAULT.isCompatible(socket));
-      TlsConfiguration.USE_DEFAULT.configureProtocols(socket);
-      assertArrayEquals(defaultProtocols, socket.getEnabledProtocols());
+      assertTrue(TlsConfiguration.TLS_V1_0_AND_BELOW.isCompatible(compatibleSocket));
+      TlsConfiguration.TLS_V1_0_AND_BELOW.configureProtocols(compatibleSocket);
+      assertArrayEquals(new String[] { "TLSv1", "SSLv3" }, compatibleSocket.getEnabledProtocols());
     } finally {
-      socket.close();
+      compatibleSocket.close();
     }
 
-    assertTrue(TlsConfiguration.USE_DEFAULT.supportsNpn());
+    compatibleSocket = createSocketWithEnabledProtocols("TLSv1", "TLSv1.1");
+    try {
+      assertTrue(TlsConfiguration.TLS_V1_0_AND_BELOW.isCompatible(compatibleSocket));
+      TlsConfiguration.TLS_V1_0_AND_BELOW.configureProtocols(compatibleSocket);
+      assertArrayEquals(new String[] { "TLSv1" }, compatibleSocket.getEnabledProtocols());
+    } finally {
+      compatibleSocket.close();
+    }
+
+    SSLSocket incompatibleSocket = createSocketWithEnabledProtocols("TLSv1.1");
+    try {
+      assertFalse(TlsConfiguration.TLS_V1_0_AND_BELOW.isCompatible(incompatibleSocket));
+    } finally {
+      incompatibleSocket.close();
+    }
+
+    incompatibleSocket = createSocketWithEnabledProtocols("SSLv3");
+    try {
+      assertFalse(TlsConfiguration.TLS_V1_0_AND_BELOW.isCompatible(incompatibleSocket));
+    } finally {
+      incompatibleSocket.close();
+    }
+
+    assertTrue(TlsConfiguration.TLS_V1_0_AND_BELOW.supportsNpn());
   }
 
   private SSLSocket createSocketWithEnabledProtocols(String... protocols) throws IOException {
