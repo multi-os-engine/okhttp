@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.UUID;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -112,7 +113,10 @@ public final class SyncApiTest {
     server.enqueue(new MockResponse().setBody("abc"));
     server.play();
 
-    client.setSslSocketFactory(sslContext.getSocketFactory());
+    final boolean disableTlsFallbackScsv = true;
+    SSLSocketFactory clientSocketFactory =
+        new FallbackTestClientSocketFactory(sslContext.getSocketFactory(), disableTlsFallbackScsv);
+    client.setSslSocketFactory(clientSocketFactory);
     client.setHostnameVerifier(new RecordingHostnameVerifier());
 
     onSuccess(new Request.Builder().url(server.getUrl("/")).build())
