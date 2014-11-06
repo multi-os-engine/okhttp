@@ -22,6 +22,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -86,5 +87,12 @@ public class RecordedResponse {
   public void assertFailure(String message) {
     assertNotNull(failure);
     assertEquals(message, failure.exception().getMessage());
+  }
+
+  public void assertFailureClass(Class<?> expectedExceptionClass) {
+    assertNotNull(failure);
+    Class<? extends Throwable> actualClass = failure.exception().getClass();
+    assertTrue("Expected exception of type: " + expectedExceptionClass + " but was " + actualClass,
+        expectedExceptionClass.isAssignableFrom(actualClass));
   }
 }

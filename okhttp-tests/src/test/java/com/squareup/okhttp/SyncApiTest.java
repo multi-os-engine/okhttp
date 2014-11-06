@@ -24,8 +24,13 @@ import com.squareup.okhttp.mockwebserver.SocketPolicy;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Arrays;
 import java.util.UUID;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -112,11 +117,50 @@ public final class SyncApiTest {
     server.enqueue(new MockResponse().setBody("abc"));
     server.play();
 
-    client.setSslSocketFactory(sslContext.getSocketFactory());
+    final boolean disableTlsFallbackScsv = true;
+    SSLSocketFactory clientSocketFactory =
+        new FallbackTestClientSocketFactory(sslContext.getSocketFactory(), disableTlsFallbackScsv);
+    client.setSslSocketFactory(clientSocketFactory);
     client.setHostnameVerifier(new RecordingHostnameVerifier());
 
     onSuccess(new Request.Builder().url(server.getUrl("/")).build())
         .assertBody("abc");
+  }
+
+  // After the introduction of the TLS_FALLBACK_SCSV we expect a failure if the initial
+  // handshake fails and the server supports TLS_FALLBACK_SCSV. MockWebServer on Android uses
+  // sockets that enforced TLS_FALLBACK_SCSV checks by default.
+  @Test public void tlsHandshakeFailure_failScsvCheck() throws Exception {
+    SSLSocketFactory serverSocketFactory = sslContext.getSocketFactory();
+    SSLSocket socket = (SSLSocket) serverSocketFactory.createSocket();
+    boolean tlsFallbackScsvSupported = Arrays.asList(socket.getSupportedCipherSuites())
+        .contains(FallbackTestClientSocketFactory.TLS_FALLBACK_SCSV);
+    socket.close();
+    if (!tlsFallbackScsvSupported) {
+      // SCSV not supported on this platform. Skip this test.
+      return;
+    }
+
+    server.useHttps(serverSocketFactory, false);
+    server.enqueue(new MockResponse().setSocketPolicy(SocketPolicy.FAIL_HANDSHAKE));
+    server.play();
+
+    final boolean disableTlsFallbackScsv = false;
+    FallbackTestClientSocketFactory clientSocketFactory =
+        new FallbackTestClientSocketFactory(sslContext.getSocketFactory(), disableTlsFallbackScsv);
+    client.setSslSocketFactory(clientSocketFactory);
+    client.setHostnameVerifier(new RecordingHostnameVerifier());
+
+    try {
+      client.execute(new Request.Builder().url(server.getUrl("/")).build());
+    } catch (SSLHandshakeException expected) {
+    }
+
+    // The first request is handled by MockWebServer and intentionally failed.
+    assertEquals(1, server.getRequestCount());
+    // We assume there will be at least one fallback attempt. The number depends on the fallback
+    // protocols attempted and the protocols available on the test platform.
+    assertTrue(clientSocketFactory.getCreatedSockets().size() > 1);
   }
 
   @Test public void post() throws Exception {
