@@ -17,12 +17,12 @@
 
 package com.squareup.okhttp;
 
+import com.squareup.okhttp.internal.Bundling;
+
 import java.net.Proxy;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.net.ssl.DefaultHostnameVerifier;
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 
 public final class HttpsHandler extends HttpHandler {
@@ -51,12 +51,7 @@ public final class HttpsHandler extends HttpHandler {
 
         client.setProtocols(ENABLED_PROTOCOLS);
 
-        HostnameVerifier verifier = HttpsURLConnection.getDefaultHostnameVerifier();
-        // Assume that the internal verifier is better than the
-        // default verifier.
-        if (!(verifier instanceof DefaultHostnameVerifier)) {
-            client.setHostnameVerifier(verifier);
-        }
+        client.setHostnameVerifier(Bundling.getDefaultHostnameVerifier());
         // OkHttp does not automatically honor the system-wide SSLSocketFactory set with
         // HttpsURLConnection.setDefaultSSLSocketFactory().
         // See https://github.com/square/okhttp/issues/184 for details.

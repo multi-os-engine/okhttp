@@ -17,8 +17,12 @@ LOCAL_PATH := $(call my-dir)
 
 okhttp_common_src_files := $(call all-java-files-under,okhttp/src/main/java)
 okhttp_common_src_files += $(call all-java-files-under,okio/src/main/java)
+okhttp_unbundled_src_files := $(okhttp_common_src_files)
+okhttp_unbundled_src_files += $(call all-java-files-under, android/unbundled/java)
+
 okhttp_system_src_files := $(filter-out %/Platform.java, $(okhttp_common_src_files))
 okhttp_system_src_files += $(call all-java-files-under, android/main/java)
+okhttp_system_src_files += $(call all-java-files-under, android/platform/java)
 
 okhttp_test_src_files := $(call all-java-files-under,okhttp-tests/src/test/java)
 okhttp_test_src_files += $(call all-java-files-under,mockwebserver/src/main/java)
@@ -40,7 +44,7 @@ include $(BUILD_JAVA_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := okhttp-static
 LOCAL_MODULE_TAGS := optional
-LOCAL_SRC_FILES := $(okhttp_common_src_files)
+LOCAL_SRC_FILES := $(okhttp_unbundled_src_files)
 LOCAL_JAVACFLAGS := -encoding UTF-8
 # This is set when building apps - exclude platform targets.
 ifneq ($(TARGET_BUILD_APPS),)
