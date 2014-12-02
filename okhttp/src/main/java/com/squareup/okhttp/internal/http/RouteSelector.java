@@ -197,7 +197,7 @@ public final class RouteSelector {
             "Proxy.address() is not an " + "InetSocketAddress: " + proxyAddress.getClass());
       }
       InetSocketAddress proxySocketAddress = (InetSocketAddress) proxyAddress;
-      socketHost = proxySocketAddress.getHostName();
+      socketHost = proxySocketAddress.getHostString();
       socketPort = proxySocketAddress.getPort();
     }
 
