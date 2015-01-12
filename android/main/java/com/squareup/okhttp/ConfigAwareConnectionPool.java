@@ -89,7 +89,8 @@ public class ConfigAwareConnectionPool {
               ConnectionPool oldConnectionPool = connectionPool;
               connectionPool = null;
               if (oldConnectionPool != null) {
-                oldConnectionPool.enterDrainMode();
+// TODO Upstream the changes needed for this.
+//                oldConnectionPool.enterDrainMode();
               }
             }
           }
