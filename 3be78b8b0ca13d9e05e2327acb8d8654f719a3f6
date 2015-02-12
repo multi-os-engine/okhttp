@@ -1,0 +1,8 @@
+Verified+1: Deckard Autoverifier <deckard@android.com>
+Code-Review+2: Narayan Kamath <narayan@google.com>
+Verified+1: Neil Fuller <nfuller@google.com>
+Submitted-by: Neil Fuller <nfuller@google.com>
+Submitted-at: Thu, 12 Feb 2015 09:33:01 +0000
+Reviewed-on: https://android-review.googlesource.com/130984
+Project: platform/external/okhttp
+Branch: refs/heads/master
