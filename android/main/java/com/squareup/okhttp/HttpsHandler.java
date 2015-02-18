@@ -17,7 +17,9 @@
 
 package com.squareup.okhttp;
 
+import java.io.IOException;
 import java.net.Proxy;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,8 +71,8 @@ public final class HttpsHandler extends HttpHandler {
     }
 
     @Override
-    protected OkUrlFactory newOkUrlFactory(Proxy proxy) {
-        OkUrlFactory okUrlFactory = createHttpsOkUrlFactory(proxy);
+    protected OkUrlFactory newOkUrlFactory(Proxy proxy, URL url) throws IOException {
+        OkUrlFactory okUrlFactory = createHttpsOkUrlFactory(proxy, url);
         // For HttpsURLConnections created through java.net.URL Android uses a connection pool that
         // is aware when the default network changes so that pooled connections are not re-used when
         // the default network changes.
@@ -81,11 +83,13 @@ public final class HttpsHandler extends HttpHandler {
     /**
      * Creates an OkHttpClient suitable for creating {@link HttpsURLConnection} instances on
      * Android.
+     *
+     * @param url URL for which this check is performed.
      */
     // Visible for android.net.Network.
-    public static OkUrlFactory createHttpsOkUrlFactory(Proxy proxy) {
+    public static OkUrlFactory createHttpsOkUrlFactory(Proxy proxy, URL url) {
         // The HTTPS OkHttpClient is an HTTP OkHttpClient with extra configuration.
-        OkUrlFactory okUrlFactory = HttpHandler.createHttpOkUrlFactory(proxy);
+        OkUrlFactory okUrlFactory = HttpHandler.createGenericOkUrlFactory(proxy);
 
         OkHttpClient okHttpClient = okUrlFactory.client();
 
