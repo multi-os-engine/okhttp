@@ -18,6 +18,7 @@
 package com.squareup.okhttp;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.Proxy;
 import java.net.ResponseCache;
 import java.net.URL;
@@ -68,7 +69,11 @@ public class HttpHandler extends URLStreamHandler {
 
         // Do not permit http -> https and https -> http redirects.
         client.setFollowSslRedirects(false);
-        client.setConnectionSpecs(CLEARTEXT_ONLY);
+        if (isCleartextTrafficPermitted()) {
+          client.setConnectionSpecs(CLEARTEXT_ONLY);
+        } else {
+          client.setConnectionSpecs(Collections.<ConnectionSpec>emptyList());
+        }
 
         // When we do not set the Proxy explicitly OkHttp picks up a ProxySelector using
         // ProxySelector.getDefault().
@@ -85,4 +90,33 @@ public class HttpHandler extends URLStreamHandler {
         return okUrlFactory;
     }
 
+    private static Object sNetworkSecurityPolicy;
+    private static Method sCleartextTrafficPermittedMethod;
+
+    /**
+     * Checks whether cleartext network traffic (e.g., cleartext HTTP) is permitted.
+     */
+    private static boolean isCleartextTrafficPermitted() {
+        // IMPLEMENTATION NOTE: Reflection API is used because framework/base compile-time depends
+        // on this project (at the very least via android.net.Network) and thus this project cannot
+        // compile-time depend on the framework.
+        // The code invokes NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted().
+
+        try {
+            Object networkSecurityPolicy;
+            Method cleartextTrafficPermittedMethod;
+            synchronized (HttpHandler.class) {
+              if (sNetworkSecurityPolicy == null) {
+                  Class<?> cls = Class.forName("android.security.NetworkSecurityPolicy");
+                  sNetworkSecurityPolicy = cls.getMethod("getInstance").invoke(null);
+                  sCleartextTrafficPermittedMethod = cls.getMethod("isCleartextTrafficPermitted");
+              }
+              networkSecurityPolicy = sNetworkSecurityPolicy;
+              cleartextTrafficPermittedMethod = sCleartextTrafficPermittedMethod;
+            }
+            return (Boolean) cleartextTrafficPermittedMethod.invoke(networkSecurityPolicy);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read network security policy", e);
+        }
+    }
 }
