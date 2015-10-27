@@ -3119,7 +3119,7 @@ public final class URLConnectionTest {
     assertContent("abc", client.open(server.getUrl("/")));
   }
 
-  @Test void instanceFollowsRedirects() throws Exception {
+  @Test public void instanceFollowsRedirects() throws Exception {
     testInstanceFollowsRedirects("http://www.google.com/");
     testInstanceFollowsRedirects("https://www.google.com/");
   }
