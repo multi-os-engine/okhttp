@@ -38,6 +38,7 @@ import com.squareup.okhttp.internal.Version;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.CookieHandler;
+import java.net.InetAddress;
 import java.net.ProtocolException;
 import java.net.Proxy;
 import java.net.SocketTimeoutException;
@@ -900,6 +901,11 @@ public final class HttpEngine {
     }
   }
 
+  private String serverAddress() {
+    InetAddress serverAddress = (route != null) ? route.getSocketAddress().getAddress() : null;
+    return (serverAddress != null) ? serverAddress.getHostAddress() : "";
+  }
+
   private Response readNetworkResponse() throws IOException {
     transport.finishRequest();
 
@@ -908,6 +914,7 @@ public final class HttpEngine {
         .handshake(connection.getHandshake())
         .header(OkHeaders.SENT_MILLIS, Long.toString(sentRequestMillis))
         .header(OkHeaders.RECEIVED_MILLIS, Long.toString(System.currentTimeMillis()))
+        .header(OkHeaders.SERVER_ADDRESS, serverAddress())
         .build();
 
     if (!forWebSocket) {

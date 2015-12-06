@@ -55,6 +55,11 @@ public final class OkHeaders {
    */
   public static final String SELECTED_PROTOCOL = PREFIX + "-Selected-Protocol";
 
+  /**
+   * Synthetic response header: the IP address of the server.
+   */
+  public static final String SERVER_ADDRESS = PREFIX + "-Server-Address";
+
   private OkHeaders() {
   }
 
