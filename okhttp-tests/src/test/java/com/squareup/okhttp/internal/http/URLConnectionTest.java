@@ -65,7 +65,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -1030,9 +1029,7 @@ public final class URLConnectionTest {
   }
 
   @Test public void disconnectedConnection() throws IOException {
-    server.enqueue(new MockResponse()
-        .throttleBody(2, 100, TimeUnit.MILLISECONDS)
-        .setBody("ABCD"));
+    server.enqueue(new MockResponse().setBody("ABCDEFGHIJKLMNOPQR"));
     server.play();
 
     connection = client.open(server.getUrl("/"));
@@ -1040,10 +1037,6 @@ public final class URLConnectionTest {
     assertEquals('A', (char) in.read());
     connection.disconnect();
     try {
-      // Reading 'B' may succeed if it's buffered.
-      in.read();
-
-      // But 'C' shouldn't be buffered (the response is throttled) and this should fail.
       in.read();
       fail("Expected a connection closed exception");
     } catch (IOException expected) {
@@ -1324,13 +1317,11 @@ public final class URLConnectionTest {
     HttpURLConnection connection1 = client.open(server.getUrl("/"));
     InputStream in1 = connection1.getInputStream();
     assertEquals("ABCDE", readAscii(in1, 5));
-    in1.close();
     connection1.disconnect();
 
     HttpURLConnection connection2 = client.open(server.getUrl("/"));
     InputStream in2 = connection2.getInputStream();
     assertEquals("LMNOP", readAscii(in2, 5));
-    in2.close();
     connection2.disconnect();
 
     assertEquals(0, server.takeRequest().getSequenceNumber());

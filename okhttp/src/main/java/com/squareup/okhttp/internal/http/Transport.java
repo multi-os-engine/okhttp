@@ -76,8 +76,6 @@ interface Transport {
    */
   void releaseConnectionOnIdle() throws IOException;
 
-  void disconnect(HttpEngine engine) throws IOException;
-
   /**
    * Returns true if the socket connection held by this transport can be reused
    * for a follow-up exchange.
