@@ -1546,7 +1546,7 @@ public final class HttpUrl {
         // Skip this character.
       } else if (query && codePoint == '+') {
         // HTML permits space to be encoded as '+'. We use '%20' to avoid special cases.
-        out.writeUtf8(alreadyEncoded ? "%20" : "%2B");
+        out.writeUtf8(alreadyEncoded ? "+" : "%2B");
       } else if (codePoint < 0x20
           || codePoint >= 0x7f
           || encodeSet.indexOf(codePoint) != -1
