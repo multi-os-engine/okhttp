@@ -16,9 +16,14 @@
 package com.squareup.okhttp.internal.spdy;
 
 import com.squareup.okhttp.internal.Util;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
+
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
@@ -515,14 +520,32 @@ public class Http2Test {
     assertTrue(frame.exhausted());
   }
 
-  @Test public void tooLargeDataFrame() throws IOException {
-    try {
-      sendDataFrame(new Buffer().write(new byte[0x1000000]));
-      fail();
-    } catch (IllegalArgumentException e) {
-      assertEquals("FRAME_SIZE_ERROR length > 16384: 16777216", e.getMessage());
+    @Test
+    public void tooLargeDataFrame() throws IOException {
+        // Run getprop and parse the result.
+        try {
+            Process p = Runtime.getRuntime().exec("/system/bin/getprop ro.config.low_ram");
+            int exitValue = p.waitFor();
+            if (exitValue == 0) {
+                String line = new BufferedReader(new InputStreamReader(p.getInputStream())).readLine();
+                if (line != null) {
+                    Boolean lowRam = Boolean.parseBoolean(line);
+                    if (lowRam) {
+                        Logger logger = Logger.getLogger(Http2Test.class.getSimpleName());
+                        logger.info("Low ram device didn't support this case!");
+                        return;
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        try {
+            sendDataFrame(new Buffer().write(new byte[0x1000000]));
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("FRAME_SIZE_ERROR length > 16384: 16777216", e.getMessage());
+        }
     }
-  }
 
   @Test public void windowUpdateRoundTrip() throws IOException {
     final long expectedWindowSizeIncrement = 0x7fffffff;
