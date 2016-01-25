@@ -517,10 +517,10 @@ public class Http2Test {
 
   @Test public void tooLargeDataFrame() throws IOException {
     try {
-      sendDataFrame(new Buffer().write(new byte[0x1000000]));
+      sendDataFrame(new Buffer().write(new byte[0x40000]));
       fail();
     } catch (IllegalArgumentException e) {
-      assertEquals("FRAME_SIZE_ERROR length > 16384: 16777216", e.getMessage());
+      assertEquals("FRAME_SIZE_ERROR length > 16384: 262144", e.getMessage());
     }
   }
 
