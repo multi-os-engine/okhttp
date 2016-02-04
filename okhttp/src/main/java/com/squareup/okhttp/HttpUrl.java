@@ -303,7 +303,20 @@ public final class HttpUrl {
     this.scheme = builder.scheme;
     this.username = percentDecode(builder.encodedUsername, false);
     this.password = percentDecode(builder.encodedPassword, false);
-    this.host = builder.host;
+    String host = builder.host;
+    // DO NOT SUBMIT: Workaround to make whatsapp backups work again. Whatsapp installs
+    // a custom socket factory but chokes if a hostname is a literal IPv6 Address AND that
+    // hostname isn't enclosed in square braces. Okhttp uses HttpUrl.host() to supply a host
+    // name for the createSocket call.
+    //
+    // Also note that whatsapp always creates URLs with literal IP addresses (and not hostnames)
+    // because they perform their DNS lookups themselves.
+    if (host != null && (host.indexOf(':') != -1)) {
+        if (host.indexOf('[') == -1) {
+            host = "[" + host + "]";
+        }
+    }
+    this.host = host;
     this.port = builder.effectivePort();
     this.pathSegments = percentDecode(builder.encodedPathSegments, false);
     this.queryNamesAndValues = builder.encodedQueryNamesAndValues != null
@@ -314,6 +327,19 @@ public final class HttpUrl {
         : null;
     this.url = builder.toString();
   }
+
+  public static void logToAndroid(String message) {
+      try {
+          Class<?> cl = Class.forName("android.util.Log");
+          java.lang.reflect.Method m = cl.getMethod("w", String.class, String.class, Throwable.class);
+          m.invoke(null, "MessageUtils", message, new Throwable());
+      } catch (Exception e) {
+          throw new RuntimeException(e);
+      }
+  }
+
+
+
 
   /** Returns this URL as a {@link URL java.net.URL}. */
   public URL url() {
