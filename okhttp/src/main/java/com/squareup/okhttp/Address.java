@@ -38,6 +38,7 @@ import static com.squareup.okhttp.internal.Util.equal;
 public final class Address {
   final Proxy proxy;
   final String uriHost;
+
   final int uriPort;
   final SocketFactory socketFactory;
   final SSLSocketFactory sslSocketFactory;
@@ -71,7 +72,7 @@ public final class Address {
   }
 
   /** Returns the hostname of the origin server. */
-  public String getUriHost() {
+  public String getRfc2732Host() {
     return uriHost;
   }
 
