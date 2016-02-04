@@ -303,7 +303,20 @@ public final class HttpUrl {
     this.scheme = builder.scheme;
     this.username = percentDecode(builder.encodedUsername, false);
     this.password = percentDecode(builder.encodedPassword, false);
-    this.host = builder.host;
+    String host = builder.host;
+    // DO NOT SUBMIT: Workaround to make whatsapp backups work again. Whatsapp installs
+    // a custom socket factory but chokes if a hostname is a literal IPv6 Address AND that
+    // hostname isn't enclosed in square braces. Okhttp uses HttpUrl.host() to supply a host
+    // name for the createSocket call.
+    //
+    // Also note that whatsapp always creates URLs with literal IP addresses (and not hostnames)
+    // because they perform their DNS lookups themselves.
+    if (host != null && (host.indexOf(':') != -1)) {
+        if (host.indexOf('[') == -1) {
+            host = "[" + host + "]";
+        }
+    }
+    this.host = host;
     this.port = builder.effectivePort();
     this.pathSegments = percentDecode(builder.encodedPathSegments, false);
     this.queryNamesAndValues = builder.encodedQueryNamesAndValues != null
