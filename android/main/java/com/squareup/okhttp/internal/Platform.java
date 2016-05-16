@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLParameters;
 
 import com.squareup.okhttp.Protocol;
 
@@ -54,6 +55,10 @@ public final class Platform {
     /** setAlpnSelectedProtocol(byte[]) */
     private static final OptionalMethod<Socket> SET_ALPN_PROTOCOLS =
             new OptionalMethod<Socket>(null, "setAlpnProtocols", byte[].class );
+    /** setEndpointIdentificationAlgorithm(String) */
+    private static final OptionalMethod<SSLParameters> SET_ENDPOINT_IDENTIFICATION_ALGORITHM =
+            new OptionalMethod<SSLParameters>(null, "setEndpointIdentificationAlgorithm",
+                    String.class);
 
     public void logW(String warning) {
         System.logW(warning);
@@ -69,10 +74,18 @@ public final class Platform {
 
     public void configureTlsExtensions(
             SSLSocket sslSocket, String hostname, List<Protocol> protocols) {
-        // Enable SNI and session tickets.
+        // Enable SNI, session tickets, and endpoint identification algorithm.
         if (hostname != null) {
             SET_USE_SESSION_TICKETS.invokeOptionalWithoutCheckedException(sslSocket, true);
             SET_HOSTNAME.invokeOptionalWithoutCheckedException(sslSocket, hostname);
+
+            // Set endpoint hostname identification algorithm.
+            SSLParameters sslParams = sslSocket.getSSLParameters();
+            boolean idAlgSupported = SET_ENDPOINT_IDENTIFICATION_ALGORITHM.isSupported(sslParams);
+            if (idAlgSupported) {
+                SET_ENDPOINT_IDENTIFICATION_ALGORITHM.invokeWithoutCheckedException(sslParams,
+                        "HTTPS");
+            }
         }
 
         // Enable ALPN.
