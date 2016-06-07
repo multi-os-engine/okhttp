@@ -15,6 +15,9 @@
 #
 LOCAL_PATH := $(call my-dir)
 
+subdirs := srcgen
+subdir_makefiles := $(call all-named-subdir-makefiles,$(subdirs))
+
 okhttp_common_src_files := $(call all-java-files-under,okhttp/src/main/java)
 okhttp_common_src_files += $(call all-java-files-under,okhttp-urlconnection/src/main/java)
 okhttp_common_src_files += $(call all-java-files-under,okhttp-android-support/src/main/java)
@@ -86,3 +89,5 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_JAVA_LANGUAGE_VERSION := 1.7
 include $(BUILD_HOST_DALVIK_JAVA_LIBRARY)
 endif  # ($(HOST_OS),linux)
+
+include $(subdir_makefiles)
