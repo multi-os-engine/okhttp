@@ -18,7 +18,6 @@ package com.squareup.okhttp.internal.huc;
 
 import com.squareup.okhttp.Handshake;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.internal.URLFilter;
 import java.net.URL;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
@@ -28,10 +27,6 @@ public final class HttpsURLConnectionImpl extends DelegatingHttpsURLConnection {
 
   public HttpsURLConnectionImpl(URL url, OkHttpClient client) {
     this(new HttpURLConnectionImpl(url, client));
-  }
-
-  public HttpsURLConnectionImpl(URL url, OkHttpClient client, URLFilter filter) {
-    this(new HttpURLConnectionImpl(url, client, filter));
   }
 
   public HttpsURLConnectionImpl(HttpURLConnectionImpl delegate) {
@@ -68,19 +63,15 @@ public final class HttpsURLConnectionImpl extends DelegatingHttpsURLConnection {
     return delegate.client.getSslSocketFactory();
   }
 
-  // ANDROID-BEGIN
-  //  @Override public long getContentLengthLong() {
-  //    return delegate.getContentLengthLong();
-  //  }
-  // ANDROID-END
+  @Override public long getContentLengthLong() {
+    return delegate.getContentLengthLong();
+  }
 
   @Override public void setFixedLengthStreamingMode(long contentLength) {
     delegate.setFixedLengthStreamingMode(contentLength);
   }
 
-  // ANDROID-BEGIN
-  // @Override public long getHeaderFieldLong(String field, long defaultValue) {
-  //   return delegate.getHeaderFieldLong(field, defaultValue);
-  // }
-  // ANDROID-END
+  @Override public long getHeaderFieldLong(String field, long defaultValue) {
+    return delegate.getHeaderFieldLong(field, defaultValue);
+  }
 }
