@@ -555,9 +555,8 @@ public class HttpURLConnectionImpl extends HttpURLConnection {
       return;
     }
 
-    // TODO: Deprecate use of X-Android-Transports header?
     if ("X-Android-Transports".equals(field) || "X-Android-Protocols".equals(field)) {
-      setProtocols(newValue, false /* append */);
+      // Ignore deprecated header that was supported in OkHttp 1.1 - 3.3
     } else {
       requestHeaders.set(field, newValue);
     }
@@ -589,9 +588,8 @@ public class HttpURLConnectionImpl extends HttpURLConnection {
       return;
     }
 
-    // TODO: Deprecate use of X-Android-Transports header?
     if ("X-Android-Transports".equals(field) || "X-Android-Protocols".equals(field)) {
-      setProtocols(value, true /* append */);
+      // Ignore deprecated header that was supported in OkHttp 1.1 - 3.3
     } else {
       requestHeaders.add(field, value);
     }
