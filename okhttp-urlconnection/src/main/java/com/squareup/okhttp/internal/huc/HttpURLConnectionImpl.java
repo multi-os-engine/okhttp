@@ -555,9 +555,8 @@ public class HttpURLConnectionImpl extends HttpURLConnection {
       return;
     }
 
-    // TODO: Deprecate use of X-Android-Transports header?
     if ("X-Android-Transports".equals(field) || "X-Android-Protocols".equals(field)) {
-      setProtocols(newValue, false /* append */);
+      // Ignore deprecated header that was supported in OkHttp 1.1 - 3.3
     } else {
       requestHeaders.set(field, newValue);
     }
@@ -589,33 +588,11 @@ public class HttpURLConnectionImpl extends HttpURLConnection {
       return;
     }
 
-    // TODO: Deprecate use of X-Android-Transports header?
     if ("X-Android-Transports".equals(field) || "X-Android-Protocols".equals(field)) {
-      setProtocols(value, true /* append */);
+      // Ignore deprecated header that was supported in OkHttp 1.1 - 3.3
     } else {
       requestHeaders.add(field, value);
     }
-  }
-
-  /*
-   * Splits and validates a comma-separated string of protocols.
-   * When append == false, we require that the transport list contains "http/1.1".
-   * Throws {@link IllegalStateException} when one of the protocols isn't
-   * defined in {@link Protocol OkHttp's protocol enumeration}.
-   */
-  private void setProtocols(String protocolsString, boolean append) {
-    List<Protocol> protocolsList = new ArrayList<>();
-    if (append) {
-      protocolsList.addAll(client.getProtocols());
-    }
-    for (String protocol : protocolsString.split(",", -1)) {
-      try {
-        protocolsList.add(Protocol.get(protocol));
-      } catch (IOException e) {
-        throw new IllegalStateException(e);
-      }
-    }
-    client.setProtocols(protocolsList);
   }
 
   @Override public void setRequestMethod(String method) throws ProtocolException {
