@@ -1,0 +1,8 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Code-Review+2: Neil Fuller <nfuller@google.com>
+Verified+1: Tobias Thierer <tobiast@google.com>
+Submitted-by: Tobias Thierer <tobiast@google.com>
+Submitted-at: Mon, 04 Jul 2016 10:31:35 +0000
+Reviewed-on: https://android-review.googlesource.com/245071
+Project: platform/external/okhttp
+Branch: refs/heads/master
