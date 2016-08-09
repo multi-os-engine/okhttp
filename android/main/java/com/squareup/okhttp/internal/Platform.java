@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2012 Square, Inc.
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (c) 2014-2016, Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +29,9 @@ import java.net.URL;
 import java.util.List;
 import javax.net.ssl.SSLSocket;
 
+// TODO(MOE): Fix jarjar issues properly
+// import com.android.org.conscrypt.OpenSSLSocketImpl;
+import org.conscrypt.OpenSSLSocketImpl;
 import com.squareup.okhttp.Protocol;
 
 import okio.Buffer;
